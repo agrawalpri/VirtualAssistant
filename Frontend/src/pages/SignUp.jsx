@@ -12,7 +12,7 @@ import React from "react";
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
-  const { serverUrl } = useContext(UserDataContext);
+  const { serverUrl, userData, setUserData } = useContext(UserDataContext);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,11 +29,12 @@ function SignUp() {
         { name, email, password },
         { withCredentials: true }
       );
-      // setUserData(result.data);
+      setUserData(result.data);
       setLoading(false);
-      console.log(result.data);
+      navigate("/customize");
+      // console.log(result.data);
     } catch (error) {
-      // setUserData(null);
+      setUserData(null);
       console.error("Error during sign up:", error);
       setLoading(false);
       setErr(error.response.data.message);

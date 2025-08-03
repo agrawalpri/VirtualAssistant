@@ -12,7 +12,7 @@ import React from "react";
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const { serverUrl } = useContext(UserDataContext);
+  const { serverUrl, userData, setUserData } = useContext(UserDataContext);
   const navigate = useNavigate();
   // const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,11 +29,12 @@ function SignIn() {
         { email, password },
         { withCredentials: true }
       );
-      // setUserData(result.data);
+      setUserData(result.data);
       setLoading(false);
-      console.log(result.data);
+      navigate("/");
+      // console.log(result.data);
     } catch (error) {
-      // setUserData(null);
+      setUserData(null);
       console.error("Error during sign in:", error);
       setLoading(false);
       setErr(error.response.data.message);
