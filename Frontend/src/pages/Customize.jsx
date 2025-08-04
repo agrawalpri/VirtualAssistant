@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import image1 from "../assets/image1.png";
 import image2 from "../assets/image2.jpg";
@@ -9,9 +9,20 @@ import image6 from "../assets/image6.jpeg.jpg";
 import image7 from "../assets/images7.jpeg";
 import Card from "../components/Card";
 function Customize() {
+  const [frontendImage, setFrontendImage] = useState(null);
+  const [backendImage, setBackendImage] = useState(null);
+  const InputImage = useRef();
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    setBackendImage(file);
+    setFrontendImage(URL.createObjectURL(file));
+  };
   return (
-    <div className="w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center  flex-col">
-      <div className="w-[90%] max-w-[60%] flex justify-center items-center flex-wrap gap-[15px]">
+    <div className="w-full min-h-screen bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center  flex-col p-[20px] ">
+      <h1 className="text-white text-[30px] text-center mb-[40px] ">
+        Select Your <span className="text-blue-300">Assistant Image</span>
+      </h1>
+      <div className="w-full max-w-[900px] flex justify-center items-center flex-wrap gap-[15px]">
         <Card image={image1} />
         <Card image={image2} />
         <Card image={image3} />
@@ -19,10 +30,28 @@ function Customize() {
         <Card image={image5} />
         <Card image={image6} />
         <Card image={image7} />
-        <div className="w-[150px] h-[250px] bg-[#020220] border-2 border-[#0000ff66] rounded-2xl overflow-hidden hover: shadow-2xl hover:shadow-blue-950 cursor-pointer hover:border-4 hover:border-white  flex items-center justify-center">
-          <LuImagePlus className="text-white w-[35px] h-[35-px] " />
+        <div
+          className="w-[50px] h-[100px] lg:w-[140px] lg:h-[220px]  bg-[#020220] border-2 border-[#0000ff66] rounded-2xl overflow-hidden hover: shadow-2xl hover:shadow-blue-950 cursor-pointer hover:border-4 hover:border-white  flex items-center justify-center"
+          onClick={() => InputImage.current.click()}
+        >
+          {!frontendImage && (
+            <LuImagePlus className="text-white w-[35px] h-[35-px] " />
+          )}
+          {frontendImage && (
+            <img src={frontendImage} className="h-full object-cover" />
+          )}
         </div>
+        <input
+          type="file"
+          accept="image/*"
+          ref={InputImage}
+          hidden
+          onChange={handleImage}
+        />
       </div>
+      <button className=" mt-5 min-w-[80px] h-[35px] bg-white rounded-full text-black font-semibold text-[18px] hover:bg-blue-400 transition-all duration-300">
+        Next
+      </button>
     </div>
   );
 }
