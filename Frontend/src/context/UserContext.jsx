@@ -5,6 +5,9 @@ export const UserDataContext = createContext();
 function UserContext({ children }) {
   const serverUrl = "http://localhost:8000";
   const [userData, setUserData] = useState(null);
+  const [frontendImage, setFrontendImage] = useState(null);
+  const [backendImage, setBackendImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const handleCurrentUser = async () => {
     try {
       const result = await axios.get(`${serverUrl}/api/user/current`, {
@@ -23,6 +26,12 @@ function UserContext({ children }) {
     serverUrl,
     userData,
     setUserData,
+    backendImage,
+    setBackendImage,
+    frontendImage,
+    setFrontendImage,
+    selectedImage,
+    setSelectedImage,
   };
   return (
     <div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import image1 from "../assets/image1.png";
 import image2 from "../assets/image2.jpg";
@@ -8,15 +8,27 @@ import image5 from "../assets/image5.png";
 import image6 from "../assets/image6.jpeg.jpg";
 import image7 from "../assets/images7.jpeg";
 import Card from "../components/Card";
+import { UserDataContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 function Customize() {
-  const [frontendImage, setFrontendImage] = useState(null);
-  const [backendImage, setBackendImage] = useState(null);
+  const {
+    serverUrl,
+    userData,
+    setUserData,
+    backendImage,
+    setBackendImage,
+    frontendImage,
+    setFrontendImage,
+    selectedImage,
+    setSelectedImage,
+  } = useContext(UserDataContext);
   const InputImage = useRef();
   const handleImage = (e) => {
     const file = e.target.files[0];
     setBackendImage(file);
     setFrontendImage(URL.createObjectURL(file));
   };
+  const navigate = useNavigate();
   return (
     <div className="w-full min-h-screen bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center  flex-col p-[20px] ">
       <h1 className="text-white text-[30px] text-center mb-[40px] ">
@@ -31,8 +43,15 @@ function Customize() {
         <Card image={image6} />
         <Card image={image7} />
         <div
-          className="w-[50px] h-[100px] lg:w-[140px] lg:h-[220px]  bg-[#020220] border-2 border-[#0000ff66] rounded-2xl overflow-hidden hover: shadow-2xl hover:shadow-blue-950 cursor-pointer hover:border-4 hover:border-white  flex items-center justify-center"
-          onClick={() => InputImage.current.click()}
+          className={`w-[50px] h-[100px] lg:w-[140px] lg:h-[220px]  bg-[#020220] border-2 border-[#0000ff66] rounded-2xl overflow-hidden hover: shadow-2xl hover:shadow-blue-950 cursor-pointer hover:border-4 hover:border-white  flex items-center justify-center ${
+            selectedImage == "input"
+              ? "border-4 border-white shadow-2xl shadow-blue-950"
+              : null
+          }`}
+          onClick={() => {
+            InputImage.current.click();
+            setSelectedImage("input");
+          }}
         >
           {!frontendImage && (
             <LuImagePlus className="text-white w-[35px] h-[35-px] " />
@@ -49,9 +68,14 @@ function Customize() {
           onChange={handleImage}
         />
       </div>
-      <button className=" mt-5 min-w-[80px] h-[35px] bg-white rounded-full text-black font-semibold text-[18px] hover:bg-blue-400 transition-all duration-300">
-        Next
-      </button>
+      {selectedImage && (
+        <button
+          className=" mt-5 min-w-[80px] h-[35px] bg-white rounded-full text-black font-semibold text-[18px] hover:bg-blue-400 transition-all duration-300"
+          onClick={() => navigate("/customize2")}
+        >
+          Next
+        </button>
+      )}
     </div>
   );
 }

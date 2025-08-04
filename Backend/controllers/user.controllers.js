@@ -12,3 +12,8 @@ export const getCurrentUser = async (req, res) => {
     return res.status(500).json({ message: `Get Current User Error ${error}` });
   }
 };
+
+export const updateAssistant = async (req, res) => {
+  try {
+  } catch (error) {}
+};
