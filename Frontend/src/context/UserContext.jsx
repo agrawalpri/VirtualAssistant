@@ -8,6 +8,7 @@ function UserContext({ children }) {
   const [frontendImage, setFrontendImage] = useState(null);
   const [backendImage, setBackendImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const handleCurrentUser = async () => {
     try {
       const result = await axios.get(`${serverUrl}/api/user/current`, {
@@ -17,6 +18,8 @@ function UserContext({ children }) {
       console.log(result.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // <-- stop loading no matter what
     }
   };
   useEffect(() => {
@@ -26,6 +29,7 @@ function UserContext({ children }) {
     serverUrl,
     userData,
     setUserData,
+    isLoading,
     backendImage,
     setBackendImage,
     frontendImage,

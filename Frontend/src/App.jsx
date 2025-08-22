@@ -10,13 +10,14 @@ import Home from "./pages/home";
 import Customize2 from "./pages/Customize2";
 
 function App() {
-  const { userData, setUSerData } = useContext(UserDataContext);
+  const { userData, isLoading, setUSerData } = useContext(UserDataContext);
+  if (isLoading) return <div>Loading...</div>;
   return (
     <Routes>
       <Route
         path="/"
         element={
-          userData?.assistantImage && userData.assistantName ? (
+          userData?.assistantImage && userData?.assistantName ? (
             <Home />
           ) : (
             <Navigate to={"/customize"} />
@@ -29,15 +30,15 @@ function App() {
       />
       <Route
         path="/signin"
-        element={!userData ? <SignIn /> : <Navigate to={"/"} />}
+        element={!userData ? <SignIn /> : <Navigate to={"/customize"} />}
       />
       <Route
         path="/customize"
-        element={userData ? <Customize /> : <Navigate to={"/signin"} />}
+        element={userData ? <Customize /> : <Navigate to={"/signup"} />}
       />
       <Route
         path="/customize2"
-        element={userData ? <Customize2 /> : <Navigate to={"/signin"} />}
+        element={userData ? <Customize2 /> : <Navigate to={"/signup"} />}
       />
     </Routes>
   );

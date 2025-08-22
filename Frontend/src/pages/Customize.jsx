@@ -10,6 +10,7 @@ import image7 from "../assets/images7.jpeg";
 import Card from "../components/Card";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { MdKeyboardBackspace } from "react-icons/md";
 function Customize() {
   const {
     serverUrl,
@@ -22,6 +23,7 @@ function Customize() {
     selectedImage,
     setSelectedImage,
   } = useContext(UserDataContext);
+  // const [frontendImage, setFrontendImage]=useState(null);
   const InputImage = useRef();
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -31,6 +33,10 @@ function Customize() {
   const navigate = useNavigate();
   return (
     <div className="w-full min-h-screen bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center  flex-col p-[20px] ">
+      <MdKeyboardBackspace
+        className="absolute top-[30px] left-[30px] text-white cursor-pointer w-[25px] h-[20px] "
+        onClick={() => navigate("/")}
+      />
       <h1 className="text-white text-[30px] text-center mb-[40px] ">
         Select Your <span className="text-blue-300">Assistant Image</span>
       </h1>
@@ -70,7 +76,7 @@ function Customize() {
       </div>
       {selectedImage && (
         <button
-          className=" mt-5 min-w-[80px] h-[35px] bg-white rounded-full text-black font-semibold text-[18px] hover:bg-blue-400 transition-all duration-300"
+          className=" mt-5 min-w-[80px] h-[35px] bg-white rounded-full text-black font-semibold text-[18px] cursor-pointer hover:bg-blue-400 transition-all duration-300"
           onClick={() => navigate("/customize2")}
         >
           Next

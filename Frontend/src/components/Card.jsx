@@ -22,6 +22,8 @@ function Card({ image }) {
       }`}
       onClick={() => {
         setSelectedImage(image);
+        setBackendImage(null);
+        setFrontendImage(null);
       }}
     >
       <img src={image} alt="" className="h-full object-cover" />
