@@ -13,6 +13,7 @@ function Customize2() {
   );
   const [loading, setLoading] = useState(false);
   const handleUpdateAssistant = async () => {
+    setLoading(true);
     try {
       let formData = new FormData();
       formData.append("assistantName", assistantName);
@@ -27,9 +28,12 @@ function Customize2() {
         formData,
         { withCredentials: true }
       );
+      setLoading(false);
       console.log(result.data);
       setUserData(result.data);
+      navigate("/");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
