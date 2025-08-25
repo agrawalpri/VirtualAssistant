@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.routes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import geminiResponse from "./routes/gemini.js";
 
 const app = express();
 app.use(
@@ -20,6 +21,11 @@ app.use(express.json()); //middleware for json data
 app.use(cookieParser()); //middleware for cookies
 app.use("/api/auth", authRouter); //middleware for auth routes
 app.use("/api/user", userRouter);
+app.get("/", async (req, res) => {
+  let prompt = req.query.prompt;
+  let data = await geminiResponse(prompt);
+  res.json(data);
+});
 
 app.listen(port, () => {
   connectDB();

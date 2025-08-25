@@ -1,5 +1,8 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
+import moment from "moment";
 import User from "../models/user.model.js";
+import geminiResponse from "../routes/gemini.js";
+import { response } from "express";
 export const getCurrentUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -38,5 +41,83 @@ export const updateAssistant = async (req, res) => {
     return res.status(200).json(user);
   } catch (error) {
     return res.status(500).json({ message: `Update Assistant Error ${error}` });
+  }
+};
+
+export const askToAssistant = async (req, res) => {
+  try {
+    const { command } = req.body;
+    const user = await User.findById(req.userId);
+    const userName = user.name;
+    const assistantName = user.assistantName;
+    const result = await geminiResponse(command, assistantName, userName);
+    const jsonMatch = result.match(/{[\s\S]*}/);
+    if (!jsonMatch) {
+      return res
+        .status(500)
+        .json({ message: "Invalid response from assistant" });
+    }
+    const gemResult = JSON.parse(jsonMatch[0]);
+    const type = gemResult.type;
+    switch (type) {
+      case "get_date":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: `Today's date is ${moment().format("YYYY-MM-DD")}`,
+        });
+      case "get_time":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: `The current time is ${moment().format("hh:mm A")}`,
+        });
+      case "get_day":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: `Today is ${moment().format("dddd")}`,
+        });
+      case "get_month":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: `This month is ${moment().format("MMMM")}`,
+        });
+      case "get_year":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: `This year is ${moment().format("YYYY")}`,
+        });
+      case "genral":
+      case "google_search":
+      case "youtube_search":
+
+      case "youtube_play":
+      case "open_instagram":
+
+      case "open_whatsapp":
+      case "open_telegram":
+      case "open_facebook":
+      case "open_calculator":
+      case "weather_show":
+        return res.json({
+          type,
+          userInput: gemResult.userInput,
+          response: gemResult.response,
+        });
+
+      default:
+        return res.status(400).json({
+          response: "I didn't understand that. Could you please rephrase?",
+        });
+    }
+    return res.status(200).json(gemResult);
+    // const assistantImage = user.assistantImage;
+  } catch (error) {
+    return res.status(500).json({
+      response: "Ask assistant Error ${error}",
+    });
   }
 };
