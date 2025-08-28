@@ -17,7 +17,7 @@ const geminiResponse = async (command, assistantName, userName) => {
     -"userInput": original sentence the user spoke.
     -"response": a short spoken voice-friendly response , e.g. "Sure, I can help with that!" or "Here's what I found on Google.,"Today is Monday", etc
     Type meanings:
-    - genral: for general queries and conversations or factual query.
+    - genral: for general queries and conversations or factual query. aur agar user koi aisa question puchta hai jiska tumhe pt ahai to uska answer dena hai lekin short me dena hai. 
     - google_search: when the user wants to search something on google.
     - youtube_search: when the user wants to search something on youtube.
     - youtube_play: when the user wants to play a specific video on youtube.
